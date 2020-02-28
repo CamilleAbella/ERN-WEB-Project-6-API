@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^4.0.0",
     "better-sqlite3": "^6.0.1",
     "body-parser": "^1.19.0",
+    "bouncy": "^3.2.2",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "^3.21.3",
     "jsonwebtoken": "^8.5.1"

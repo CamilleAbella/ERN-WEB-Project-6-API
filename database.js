@@ -1,7 +1,7 @@
 
-import sqlite from 'better-sqlite3'
+const db = require('better-sqlite3')('storage.db')
 
-const db = sqlite('storage.db')
+db.pragma('foreign_keys = ON')
 
 for( const request of [
     `
@@ -19,7 +19,8 @@ for( const request of [
             description varchar(2048) NOT NULL,
             image varchar(64),
             bakingtime integer NOT NULL,
-            cookingtime integer NOT NULL
+            cookingtime integer NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES user(id)
         )
     `,
     `
@@ -27,7 +28,9 @@ for( const request of [
             id integer PRIMARY KEY,
             user_id integer NOT NULL,
             recette_id integer NOT NULL,
-            note integer NOT NULL
+            note integer NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES user(id),
+            FOREIGN KEY (recette_id) REFERENCES recette(id)
         )
     `,
     `
@@ -40,7 +43,9 @@ for( const request of [
         CREATE TABLE IF NOT EXISTS ingredient (
             id integer PRIMARY KEY,
             name_id integer NOT NULL,
-            recette_id integer NOT NULL
+            recette_id integer NOT NULL,
+            FOREIGN KEY (name_id) REFERENCES ingredient_name(id),
+            FOREIGN KEY (recette_id) REFERENCES recette(id)
         )
     `,
     `
@@ -48,9 +53,10 @@ for( const request of [
             id integer PRIMARY KEY,
             recette_id integer NOT NULL,
             content varchar(2048) NOT NULL,
-            rank integer NOT NULL
+            rank integer NOT NULL,
+            FOREIGN KEY (recette_id) REFERENCES recette(id)
         )
     `
 ]) db.prepare(request).run()
 
-export default db
+module.exports = db
